@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import com.db.awmd.challenge.domain.Account;
 import com.db.awmd.challenge.exception.DuplicateAccountIdException;
+import com.db.awmd.challenge.exception.NegativeAmountException;
 import com.db.awmd.challenge.service.AccountsService;
 import java.math.BigDecimal;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class AccountsServiceTest {
 
   @Test
   public void addAccount() throws Exception {
-    Account account = new Account("Id-123", null);
+    Account account = new Account("Id-123", null, null, null, null);
     account.setBalance(new BigDecimal(1000));
     this.accountsService.createAccount(account);
 
@@ -32,7 +33,7 @@ public class AccountsServiceTest {
   @Test
   public void addAccount_failsOnDuplicateId() throws Exception {
     String uniqueId = "Id-" + System.currentTimeMillis();
-    Account account = new Account(uniqueId, null);
+    Account account = new Account(uniqueId, null, null, null, null);
     this.accountsService.createAccount(account);
 
     try {
@@ -43,4 +44,35 @@ public class AccountsServiceTest {
     }
 
   }
+  
+  
+  @Test
+  public void transferMoney() throws Exception {
+    Account account = new Account(null,30000l, "ID-123", "ID-323");
+    account.setFromAccountId("ID-123");
+    account.setToAccountId("ID-323");
+    account.setAmount(30000l);
+
+
+    this.accountsService.transferMoney("ID-123", "ID-323", 30000l);
+
+    assertThat(this.accountsService.transferMoney("Id-123","ID-323,30000l", 30000l)).isEqualTo(account);
+  }
+  
+  
+  @Test
+  public void transferMoney_failsOnNegativeAmount() throws Exception {
+    Account account = new Account(null,30000l, "ID-123", "ID-323");
+    this.accountsService.transferMoney("ID-123", "ID-323", 30000l);
+
+    try {
+      this.accountsService.transferMoney("ID-323", "ID-123", 30000l);
+      fail("Should have failed when adding negative amount");
+    } catch (NegativeAmountException ex) {
+      assertThat(ex.getMessage()).isEqualTo("Amount of transfer " + account.getAmount() + " Negative");
+    }
+
+  }
+  
+
 }

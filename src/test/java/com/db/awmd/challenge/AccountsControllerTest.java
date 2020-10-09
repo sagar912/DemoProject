@@ -94,11 +94,38 @@ public class AccountsControllerTest {
   @Test
   public void getAccount() throws Exception {
     String uniqueAccountId = "Id-" + System.currentTimeMillis();
-    Account account = new Account(uniqueAccountId, new BigDecimal("123.45"));
+    Account account = new Account(uniqueAccountId, new BigDecimal("123.45"), null, null, null);
     this.accountsService.createAccount(account);
     this.mockMvc.perform(get("/v1/accounts/" + uniqueAccountId))
       .andExpect(status().isOk())
       .andExpect(
         content().string("{\"accountId\":\"" + uniqueAccountId + "\",\"balance\":123.45}"));
   }
+  
+  
+  //========== Test Cases For Transfer Money ===================//
+  @Test
+  public void transferFund() throws Exception {
+    this.mockMvc.perform(post("/v1/accounts").contentType(MediaType.APPLICATION_JSON)
+      .content("{\"fromAccountId\":\"Id-123\",\"fromAccountId\":\"Id-323\",\"amount\":30000l}")).andExpect(status().isCreated());
+    String uniqueAccountId = "Id-" + System.currentTimeMillis();
+    Account account = new Account(uniqueAccountId, new BigDecimal("123.45"), null, null, null);
+
+    accountsService.transferMoney("Id-123","Id-323",30000l);
+    assertThat(account.getFromAccountId()).isEqualTo("Id-123");
+    assertThat(account.getToAccountId()).isEqualTo("Id-323");
+    assertThat(account.getAmount()).isEqualByComparingTo(30000l);
+    
+    
+  }
+  
+  
+  @Test
+  public void NegativetransferFund() throws Exception {
+	  this.mockMvc.perform(post("/v1/accounts").contentType(MediaType.APPLICATION_JSON)
+		      .content("{\"fromAccountId\":\"Id-123\",\"fromAccountId\":\"Id-323\",\"amount\":-30000l}")).andExpect(status().isBadRequest());
+		    
+ 
+  }
+
 }

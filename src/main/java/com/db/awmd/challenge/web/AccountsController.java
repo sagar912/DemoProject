@@ -6,6 +6,8 @@ import com.db.awmd.challenge.exception.NegativeAmountException;
 import com.db.awmd.challenge.service.AccountsService;
 import com.db.awmd.challenge.service.NotificationService;
 
+import java.math.BigDecimal;
+
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,16 +61,17 @@ public ResponseEntity<Object> transferFund(@RequestBody @Valid Account account) 
 
 log.info("Transfer account {}", account);
 
-try {
-this.accountsService.transferMoney(account);
-} catch (NegativeAmountException daie) {
-  return new ResponseEntity<>(daie.getMessage(), HttpStatus.BAD_REQUEST);
-}
+	if((account.getAmount().intValue()) <= 0) {
+		throw new NegativeAmountException("Negative amount not allowed to transfer");
+		
+	}else {
+this.accountsService.transferMoney(account.getFromAccountId(),account.getToAccountId(),account.getAmount());
+
 
 notificationService.notifyAboutTransfer(account, "Amount Transfred Success");
 
 return new ResponseEntity<>(HttpStatus.OK);
 }
-
+}
 	
 }

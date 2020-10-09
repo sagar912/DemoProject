@@ -33,9 +33,10 @@ public class AccountsRepositoryInMemory implements AccountsRepository {
   }
 
 @Override
-public Account transferMoney(Account account) throws NegativeAmountException {
+public Account transferMoney(String fromAccountId, String toAccountId, long amount) throws NegativeAmountException {
 	// TODO Auto-generated method stub
 	return null;
 }
+
 
 }

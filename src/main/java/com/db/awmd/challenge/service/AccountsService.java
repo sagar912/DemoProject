@@ -3,6 +3,9 @@ package com.db.awmd.challenge.service;
 import com.db.awmd.challenge.domain.Account;
 import com.db.awmd.challenge.repository.AccountsRepository;
 import lombok.Getter;
+
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +29,14 @@ public class AccountsService {
     
   }
   
-  public void transferMoney(Account account) {
-	    this.accountsRepository.transferMoney(account);
+  public Account transferMoney(String fromAccountId, String toAccountId, Long amount) {
+	 return  this.accountsRepository.transferMoney(toAccountId, toAccountId, amount);
 	    
 	  }
+
+
+
+
+
+
 }

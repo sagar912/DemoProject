@@ -15,7 +15,6 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Data
-
 public class Account {
 
 	@NotNull
@@ -27,19 +26,16 @@ public class Account {
 
 	private BigDecimal balance;
 	
-	@JsonProperty(required = true)
-	private BigDecimal amount;
+	private Long amount;
 
-	@JsonProperty(required = true)
-	private Long fromAccountId;
+	private String fromAccountId;
 
-	@JsonProperty(required = true)
-	private Long toAccountId;
+	private String toAccountId;
 
 	
 
-	public Account(String accountId, BigDecimal amount, Long fromAccountId, Long toAccountId) {
-		this.accountId = "";
+	public Account(String accountId, Long amount, String fromAccountId, String toAccountId) {
+		this.accountId = accountId;
 		this.amount = amount;
 		this.fromAccountId = fromAccountId;
 		this.toAccountId = toAccountId;
@@ -49,10 +45,13 @@ public class Account {
 
 
 	@JsonCreator
-	public Account(@JsonProperty("accountId") String accountId, @JsonProperty("balance") BigDecimal balance) {		this.accountId = "";
-	this.accountId = accountId;
+	public Account(@JsonProperty("accountId") String accountId, @JsonProperty("balance") BigDecimal balance,@JsonProperty("amount")Long amount,@JsonProperty("fromAccountId") String fromAccountId, @JsonProperty("toAccountId") String  toAccountIdLong) {		
+    	  
+		this.accountId = accountId;
 		this.balance = balance;
-
+		this.amount = amount;
+		this.fromAccountId = fromAccountId;
+		this.toAccountId = toAccountId;
 	}
 
 }

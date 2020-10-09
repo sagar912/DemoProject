@@ -1,5 +1,7 @@
 package com.db.awmd.challenge.repository;
 
+import java.math.BigDecimal;
+
 import com.db.awmd.challenge.domain.Account;
 import com.db.awmd.challenge.exception.DuplicateAccountIdException;
 import com.db.awmd.challenge.exception.NegativeAmountException;
@@ -10,7 +12,7 @@ public interface AccountsRepository {
 
   Account getAccount(String accountId);
   
-  Account transferMoney(Account account)throws NegativeAmountException;
+  Account transferMoney(String fromAccountId, String toAccountId, long amount)throws NegativeAmountException;
 
   void clearAccounts();
 }
