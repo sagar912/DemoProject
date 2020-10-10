@@ -61,7 +61,7 @@ public ResponseEntity<Object> transferFund(@RequestBody @Valid Account account) 
 
 log.info("Transfer account {}", account);
 
-	if((account.getAmount().intValue()) <= 0) {
+	if((account.getAmount() < 0) {
 		throw new NegativeAmountException("Negative amount not allowed to transfer");
 		
 	}else {
