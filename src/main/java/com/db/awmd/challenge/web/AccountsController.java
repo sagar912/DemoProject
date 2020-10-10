@@ -56,7 +56,7 @@ public class AccountsController {
   }
 
 	
-@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+@PostMapping(path="/transfer",consumes = MediaType.APPLICATION_JSON_VALUE)
 public ResponseEntity<Object> transferFund(@RequestBody @Valid Account account) throws NegativeAmountException {
 
 log.info("Transfer account {}", account);
